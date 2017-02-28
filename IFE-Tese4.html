@@ -1,0 +1,98 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+    <style type="text/css" >
+    #Line li{
+        list-style: none;
+        float:left;
+        margin:0 5px;
+        display:inline-block;
+        background-color: red;
+        color:#fff;
+        width:45px;
+        height:45px;
+        font-size: 18px;
+        text-align: center;
+        line-height: 2.3em;
+    }
+  
+    </style>
+  </head>
+<body>
+    <input id="pUt" type="text" placeholder="请输入一个两位数的正数：">
+    <button id="Left-In">左侧入</button>
+    <button id="Right-In">右侧入</button>
+    &nbsp&nbsp&nbsp&nbsp
+    <button id="Left-Out">左侧出</button>
+    <button id="Right-Out">右侧出</button>
+    <ul id="Line">
+        
+    </ul>
+    <script type="text/javascript">
+        var LeftIn = document.getElementById("Left-In");
+        var LeftOut = document.getElementById("Left-Out");
+        var RightIn = document.getElementById("Right-In");
+        var RightOut = document.getElementById("Right-Out");
+        var Ul = document.getElementById("Line");
+        var put = document.getElementById("pUt");
+        var line = []; //队列数组
+        
+        LeftIn.onclick = function(){
+            if( checkIn() ){
+                line.unshift(put.value); // 将参数添加进入数组末尾，并且返回修改后数组的长度；
+                Flush();
+            }     
+        };
+        LeftOut.onclick = function(){  
+            if( checkOut() ){
+                line.shift();    //移除数组第一项并返回该值，同时将数组长度减一；
+                Flush();
+            }
+        };
+        RightIn.onclick = function(){
+            if( checkIn() ){
+                line.push(put.value);  //将参数添加进入数组头部，并且返回修改后数组的长度；
+                Flush();
+            }
+        };
+        RightOut.onclick = function(){
+            if( checkOut() ){
+                line.pop();//移除数数最后一项并返回该值，同时将数组长度减一；
+                Flush();
+            }
+        };
+
+        function Flush(){    //刷新操作
+            if(line.length>1){  //清除上一次的li
+                var childs = Ul.childNodes;
+                for(var i = childs.length - 1; i >= 0; i--) { 
+                    Ul.removeChild(childs[i]); }
+                    }
+            for(i=0;i<line.length;i++){         //显示li
+                var Li = document.createElement("li");
+                Ul.append(Li);
+                Li.innerHTML=line[i];
+            }
+        }
+        function checkOut(){  //检验出队操作是否可行
+            if(line.length==0){
+                alert("没有数可以弹出！");
+                return false;}
+            
+            else
+                return true;
+        }
+        function checkIn(){   //检验入队操作是否可行
+            if(put.value<0||put.value>=100){
+                alert("数字不符合！");
+                return false;}
+            else
+                return true;
+        }
+
+
+    </script>
+</body>
+</html>
