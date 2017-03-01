@@ -21,7 +21,7 @@
     </style>
   </head>
 <body>
-    <input id="pUt" type="text" placeholder="请输入一个两位数的正数：">
+    <input id="pUt" type="text" placeholder="请输入10-60之间的数：">
     <button id="Left-In">左侧入</button>
     <button id="Right-In">右侧入</button>
     &nbsp&nbsp&nbsp&nbsp
@@ -113,7 +113,7 @@
                 return true;
         }
         function checkIn(){   //检验入队操作是否可行
-            if(put.value<0||put.value>=100){
+            if(put.value<10||put.value>60){
                 alert("数字不符合！");
                 return false;}
             else
