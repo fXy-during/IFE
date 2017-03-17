@@ -81,11 +81,6 @@
         </tr>
     </tbody>
 </table>
-
-
-
-
-
 <script type="text/javascript">
 var iDiv = document.getElementById("wrap");
 var iput = document.getElementById("puts");
@@ -98,10 +93,6 @@ var addCon = document.getElementById("addCon");
 var getSpeed = document.getElementById("speed");
 var goals = [];
 var speed = 200;
-/*for(var i =0;i<Divs.length;i++){
-    Divs[i].count = i;
-    Divs[i].addEventListener("click",function(){Divs[this.count].style.backgroundColor="#666";Divs[i].stopPropagation();},false);
-}*/
 iDiv.onclick= function(e){     //点击事件
     e.target.addEventListener("click",function(e){
         goals.push(event.toElement);
@@ -116,12 +107,6 @@ del.onclick = function(){   //删除选中节点以及其子节点
     var goalParent = goals[goals.length-1].parentNode;
     goalParent.removeChild(goals[goals.length-1]);
 }
-// del.onclick = function(){   //删除选中节点的子节点
-//     var goalNode = goal.children;
-//     for(let i=goalNode.length-1 ; i>=0 ; i--){  //removeChild注意事项
-//         goal.removeChild(goal.children[i]);
-//     }
-// }
 addBtn.onclick = function(){    //添加节点
     var addEle = document.createElement("div");
     goals[goals.length-1].appendChild(addEle);
