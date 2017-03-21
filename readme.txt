@@ -1,1 +1,2 @@
-Ê²Ã´¹í¶«Î÷
+Git is a version control system.
+Git is free software.
