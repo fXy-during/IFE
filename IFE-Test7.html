@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>多叉树操作</title>
+<style type="text/css" media="screen">
+
+    div{
+        background-color: #fff;
+        border:1px solid #000;
+        margin:0 5px;
+        box-sizing: border-box;
+    }
+    #wrap{
+        width: 800px;
+        height: 200px;
+    }
+    #wrap div{
+        float: left;
+        padding:20px 10px;
+        width: calc(30% - 10px);
+        height: 100%;
+    }
+    #box{
+        width: 400px;
+        height: 25px;
+    }
+    .On{
+        background-color: deepskyblue;
+    }
+    .Up{
+        background-color: lightgreen;
+    }
+    button{
+        background-color: lightcyan;
+        border:1px solid #000;
+    }
+    button:active{
+        background-color: lightgoldenrodyellow;
+        border:1px groove lightgoldenrodyellow;
+    }
+</style>
+</head>
+<body>
+<div id="wrap">
+    <div>1
+        <div>2</div>
+        <div>3
+            <div>4</div>
+        </div>
+    </div>
+    <div>10
+        <div>6
+            <div>5</div>
+        </div>
+        <div>7</div>
+        <div>8
+            <div>9</div>
+        </div>
+    </div>   
+</div>
+    <button id="first">先序</button>
+<div id="box"><span>请输入搜索内容：</span><input id="puts" type="text"><button id="search">搜索</button></div>
+<script type="text/javascript">
+var iDiv = document.getElementById("wrap");
+var iput = document.getElementById("puts");
+var btn = document.getElementById("search");
+
+ function getArr(node,arr){
+    var child = node.children;
+    if(child.length>0){
+        for(var i = 0;i<child.length;i++){
+            arr.push(child[i]);
+            getArr(child[i],arr);
+            }
+        }
+}
+document.getElementById("first").onclick = function(){  // 先序遍历
+    var arr = [];
+    getArr(iDiv,arr);
+    var i = 0;
+    var time = setInterval(function(){
+        if(i==0){
+            arr[i].className = "On";
+            i++;     
+        }
+        else if(i ==arr.length){
+            clearInterval(time);
+            arr[i-1].className = "";
+        }
+        else{
+            arr[i-1].className = "";
+            arr[i].className = "On";
+            i++;
+        }
+        }, 200);
+}
+btn.onclick = function(){   //搜索事件
+    var arr = [];
+    clearStyle();
+    getArr(iDiv,arr);
+    var value = iput.value;
+    clearInterval(time);
+    var time = null;
+    var i = 0;
+    if(value){
+        time = setInterval(function(){
+                if(i==0){
+                    if( arr[i].innerText.toString().indexOf(value) ==0){
+                        arr[i].className = "Up";
+                        clearInterval(time);
+                    }
+                    else{
+                        arr[i].className = "On";
+                        i++;
+                    }
+                }
+                else if(i==arr.length){
+                    clearInterval(time);
+                    arr[i-1].className = "";
+                    alert("没有找到!");
+                }
+                else if( arr[i].innerText.toString().indexOf(value) ==0 ){
+                    arr[i-1].className="";
+                    arr[i].className = "Up";
+                    clearInterval(time);
+                }
+                else {
+                    arr[i-1].className = "";
+                    arr[i].className = "On";
+                    i++;
+                }
+        }, 200);
+    }
+    else{
+        alert("请输入搜索内容");
+    }
+}
+function clearStyle(){  //清空样式
+    var arr = [];
+    getArr(iDiv,arr);
+    for(let i=0;i<arr.length ; i++){
+        arr[i].className ="";
+    }
+}
+</script>
+</body>
+</html>

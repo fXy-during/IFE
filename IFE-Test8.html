@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>多叉树操作</title>
+<style type="text/css" media="screen">
+
+ div{
+    background-color: #fff;
+    border:1px solid #000;
+    margin:5px;
+}
+#wrap{
+    display: flex;
+    width: 900px;
+    height: 200px;
+    flex-direction: row-reverse;
+    align-items: center;
+}   
+#wrap>div{
+    flex-grow: 1;
+    width: 5%;
+    height: 80%;
+}
+#wrap>div:nth-of-type(2){
+    flex-grow: 3;
+}
+.On{
+    background-color: deepskyblue;
+    }
+.Up{
+    background-color: lightgreen;
+}
+.Get{
+    background-color: #666;
+}
+</style>
+</head>
+<body>
+<div id="wrap">Z
+    <div>A
+        <div>F</div>
+        <div>G</div>
+        <div>H</div>
+    </div>
+    <div>B
+        <div>I</div>
+        <div>J
+            <div>N</div>
+            <div>O
+            </div>
+        </div>
+    </div>
+    <div>C
+        <div>K</div>
+        <div>L</div>
+    </div>
+    <div>D
+        <div>M</div>
+    </div>
+    <div>E</div>
+</div>
+<table>
+    <tbody>
+        <tr>
+            <td><button id="Dep">深度优先遍历</button></td>
+        </tr>
+        <tr>
+            <td>请输入搜索内容：</td>
+            <td><input id="puts" type="text"></td>
+            <td><button id="search">搜索</button></td>
+        </tr>
+        <tr>
+            <td>输入想要增加的节点:</td>
+            <td><input id="addCon" type="text"></td>
+            <td><button id="addBtn" type="">增加节点</button><button id="delete">删除选中</button></td>
+        </tr>
+        <tr>
+            <td>请输入遍历时间间隔(单位为ms，默认200)</td>
+            <td colspan="" rowspan=""><input type="text" id="speed"></td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+var iDiv = document.getElementById("wrap");
+var iput = document.getElementById("puts");
+var btn = document.getElementById("search");
+var Dep = document.getElementById("Dep");
+var Divs = document.getElementsByTagName("div");
+var del = document.getElementById("delete");
+var addBtn = document.getElementById("addBtn");
+var addCon = document.getElementById("addCon");
+var getSpeed = document.getElementById("speed");
+var goals = [];
+var speed = 200;
+iDiv.onclick= function(e){     //点击事件
+    e.target.addEventListener("click",function(e){
+        goals.push(event.toElement);
+        if(goals.length!=1){
+            goals[goals.length-2].className="";
+        }
+        e.target.className="Get";
+        e.stopPropagation();
+    }, false);
+}
+del.onclick = function(){   //删除选中节点以及其子节点
+    var goalParent = goals[goals.length-1].parentNode;
+    goalParent.removeChild(goals[goals.length-1]);
+}
+addBtn.onclick = function(){    //添加节点
+    var addEle = document.createElement("div");
+    goals[goals.length-1].appendChild(addEle);
+    addEle.innerHTML = addCon.value;
+}
+ function getArrDep(node,arr){// 深度优先记录顺序
+    var child = node.children;
+    if(child.length>0){
+        for(var i = 0;i<child.length;i++){
+            arr.push(child[i]);
+            getArrDep(child[i],arr);
+            }
+        }
+} 
+Dep.onclick = function(){   //深度遍历事件
+    var arr = [];
+    arr.push(iDiv);
+    getArrDep(iDiv,arr);
+    ByPath(arr);
+}
+
+function ByPath(arr){  // 遍历
+    speed = getSpeed.value==0?200:getSpeed.value;
+    var i = 0;
+    var time = setInterval(function(){
+        if(i==0){
+            arr[i].className = "On";
+            i++;     
+        }
+        else if(i ==arr.length){
+            clearInterval(time);
+            arr[i-1].className = "";
+        }
+        else{
+            arr[i-1].className = "";
+            arr[i].className = "On";
+            i++;
+        }
+        }, speed);
+
+}
+btn.onclick = function(){   //搜索事件
+    var arr = [];   //arr.flag用于记录是否查找到  arr[i].On 用于记录该目标是否为搜索对象
+    arr.flag = false;
+    arr.push(iDiv);  
+    clearStyle();
+    getArrDep(iDiv,arr);
+    var value = iput.value;
+    clearInterval(time);
+    var time = null;
+    var i = 0;
+    speed = getSpeed.value==0?200:getSpeed.value;
+    if(value){
+        time = setInterval(function(){ 
+                if(i==0){
+                    if( arr[i].innerText.toString().indexOf(value) ==0){
+                        arr[i].className = "Up";
+                        arr[i].On = true;  
+                        arr.flag=true;
+                        //clearInterval(time);
+                    }
+                    else{
+                        arr[i].className = "On";
+                        arr[i].On = false;
+                        i++;
+                    }
+                }
+                else if(i==arr.length){
+                    clearInterval(time);
+                    if(!arr[i-1].On){
+                        arr[i-1].className="";
+                    }
+                    if(!arr.flag){
+                    alert("没有找到!");}
+                }
+                else if( arr[i].innerText.toString().indexOf(value) ==0 ){
+                    if(!arr[i-1].On){
+                        arr[i-1].className="";
+                    }
+                    arr[i].className = "Up";
+                    arr.flag= true;
+                    arr[i].On = true;
+                    i++;
+                    //clearInterval(time);
+                }
+                else {
+                    if(!arr[i-1].On){
+                        arr[i-1].className="";
+                    }
+                    arr[i].On=false;
+                    arr[i].className = "On";
+                    i++;
+                }
+        }, speed);
+    }
+    else{
+        alert("请输入搜索内容");
+    }
+}
+function clearStyle(){  //清空样式
+    var arr = [];
+    getArrDep(iDiv,arr);
+    for(let i=0;i<arr.length ; i++){
+        arr[i].className ="";
+    }
+}
+</script>
+</body>
+</html>

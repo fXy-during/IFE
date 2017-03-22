@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>多叉树操作</title>
+<style type="text/css" media="screen">
+
+ div{
+    background-color: #fff;
+    border:1px solid #000;
+    margin:5px;
+}
+#wrap{
+    display: flex;
+    width: 900px;
+    height: 200px;
+    flex-direction: row-reverse;
+    align-items: center;
+}   
+#wrap>div{
+    flex-grow: 1;
+    width: 5%;
+    height: 80%;
+}
+#wrap>div:nth-of-type(2){
+    flex-grow: 3;
+}
+.On{
+    background-color: deepskyblue;
+    }
+.Up{
+    background-color: lightgreen;
+}
+</style>
+</head>
+<body>
+<div id="wrap">Z
+    <div>A
+        <div>F</div>
+        <div>G</div>
+        <div>H</div>
+    </div>
+    <div>B
+        <div>I</div>
+        <div>J
+            <div>N</div>
+            <div>O
+            </div>
+        </div>
+    </div>
+    <div>C
+        <div>K</div>
+        <div>L</div>
+    </div>
+    <div>D
+        <div>M</div>
+    </div>
+    <div>E</div>
+</div>
+<button id="Dep">深度优先遍历</button>
+<input id="puts" type="text">
+<button id="search">搜索</button>
+<script type="text/javascript">
+var iDiv = document.getElementById("wrap");
+var iput = document.getElementById("puts");
+var btn = document.getElementById("search");
+var Dep = document.getElementById("Dep");
+ function getArrDep(node,arr){// 深度优先记录顺序
+    var child = node.children;
+    if(child.length>0){
+        for(var i = 0;i<child.length;i++){
+            arr.push(child[i]);
+            getArrDep(child[i],arr);
+            }
+        }
+} 
+Dep.onclick = function(){   //深度遍历事件
+    var arr = [];
+    arr.push(iDiv);
+    getArrDep(iDiv,arr);
+    ByPath(arr);
+}
+
+function ByPath(arr){  // 遍历
+    var i = 0;
+    var time = setInterval(function(){
+        if(i==0){
+            arr[i].className = "On";
+            i++;     
+        }
+        else if(i ==arr.length){
+            clearInterval(time);
+            arr[i-1].className = "";
+        }
+        else{
+            arr[i-1].className = "";
+            arr[i].className = "On";
+            i++;
+        }
+        }, 200);
+
+}
+btn.onclick = function(){   //搜索事件
+    var arr = [];
+    arr.push(iDiv);
+    clearStyle();
+    getArrDep(iDiv,arr);
+    var value = iput.value;
+    clearInterval(time);
+    var time = null;
+    var i = 0;
+    if(value){
+        time = setInterval(function(){
+                if(i==0){
+                    if( arr[i].innerText.toString().indexOf(value) ==0){
+                        arr[i].className = "Up";
+                        clearInterval(time);
+                    }
+                    else{
+                        arr[i].className = "On";
+                        i++;
+                    }
+                }
+                else if(i==arr.length){
+                    clearInterval(time);
+                    arr[i-1].className = "";
+                    alert("没有找到!");
+                }
+                else if( arr[i].innerText.toString().indexOf(value) ==0 ){
+                    arr[i-1].className="";
+                    arr[i].className = "Up";
+                    clearInterval(time);
+                }
+                else {
+                    arr[i-1].className = "";
+                    arr[i].className = "On";
+                    i++;
+                }
+        }, 200);
+    }
+    else{
+        alert("请输入搜索内容");
+    }
+}
+function clearStyle(){  //清空样式
+    var arr = [];
+    getArrDep(iDiv,arr);
+    for(let i=0;i<arr.length ; i++){
+        arr[i].className ="";
+    }
+}
+</script>
+</body>
+</html>
